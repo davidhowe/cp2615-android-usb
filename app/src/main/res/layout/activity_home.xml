@@ -1,0 +1,172 @@
+<RelativeLayout
+    android:id="@+id/rlyt_root"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/textViewTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="Serial Port"
+        android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+    <TextView
+        android:id="@+id/tv_usb_output"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="34dp"
+        android:background="#FFFFFF"
+        android:scrollbars="vertical"
+        android:gravity="bottom" />
+
+    <EditText
+        android:id="@+id/edt_id_msb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_usb_output"
+        android:layout_marginTop="28dp"
+        android:hint="Message ID MSB"
+        android:maxLength="2"
+        android:inputType="textCapCharacters"
+        android:ems="2"/>
+
+    <EditText
+        android:id="@+id/edt_id_lsb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edt_id_msb"
+        android:layout_marginTop="8dp"
+        android:hint="Message ID LSB"
+        android:maxLength="2"
+        android:inputType="textCapCharacters"
+        android:ems="2"/>
+
+    <TextView
+        android:id="@+id/tv_payload_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edt_id_lsb"
+        android:layout_centerHorizontal="true"
+        android:text="PAYLOAD DATA"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@+id/tv_payload_data"
+        android:layout_above="@+id/llyt_actions">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/edt_payload_0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="Payload [0]"
+                android:maxLength="2"
+                android:inputType="textCapCharacters"
+                android:ems="2"/>
+
+            <EditText
+                android:id="@+id/edt_payload_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edt_payload_0"
+                android:layout_marginTop="8dp"
+                android:hint="Payload [1]"
+                android:maxLength="2"
+                android:inputType="textCapCharacters"
+                android:ems="2"/>
+
+            <EditText
+                android:id="@+id/edt_payload_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edt_payload_1"
+                android:layout_marginTop="8dp"
+                android:hint="Payload [2]"
+                android:maxLength="2"
+                android:inputType="textCapCharacters"
+                android:ems="2"/>
+
+            <EditText
+                android:id="@+id/edt_payload_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edt_payload_2"
+                android:layout_marginTop="8dp"
+                android:hint="Payload [3]"
+                android:maxLength="2"
+                android:inputType="textCapCharacters"
+                android:ems="2"/>
+
+            <EditText
+                android:id="@+id/edt_payload_4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edt_payload_3"
+                android:layout_marginTop="8dp"
+                android:hint="Payload [4]"
+                android:maxLength="2"
+                android:inputType="textCapCharacters"
+                android:ems="2"/>
+
+            <EditText
+                android:id="@+id/edt_payload_5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edt_payload_4"
+                android:layout_marginTop="8dp"
+                android:hint="Payload [5]"
+                android:maxLength="2"
+                android:inputType="textCapCharacters"
+                android:ems="2"/>
+
+            <EditText
+                android:id="@+id/edt_payload_6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edt_payload_5"
+                android:layout_marginTop="8dp"
+                android:hint="Payload [6]"
+                android:maxLength="2"
+                android:inputType="textCapCharacters"
+                android:ems="2"/>
+        </RelativeLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/llyt_actions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/btn_clear"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:layout_marginEnd="8dp"
+            android:text="CLEAR"/>
+
+        <Button
+            android:id="@+id/btn_send"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:layout_marginStart="8dp"
+            android:text="SEND"/>
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>
