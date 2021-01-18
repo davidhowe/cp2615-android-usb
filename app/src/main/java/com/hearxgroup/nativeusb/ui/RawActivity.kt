@@ -1,22 +1,24 @@
-package com.hearxgroup.nativeusb
+package com.hearxgroup.nativeusb.ui
 
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.lifecycle.Observer
-import com.hearxgroup.nativeusb.utils.USBCommandUtil
-import kotlinx.android.synthetic.main.activity_home.*
+import com.hearxgroup.nativeusb.R
+import com.hearxgroup.nativeusb.USBActivity
+import kotlinx.android.synthetic.main.activity_raw.*
 
-class HomeActivity : USBActivity() {
+class RawActivity : USBActivity() {
 
-    private val TAG = HomeActivity::class.java.simpleName
+    private val TAG = RawActivity::class.java.simpleName
 
     private var serial_output: TextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
+        setContentView(R.layout.activity_raw)
 
         setupUI()
 
@@ -51,6 +53,8 @@ class HomeActivity : USBActivity() {
     }
 
     private fun sendSerialCommand() {
+
+        Log.d(TAG, "sendSerialCommand()")
 
         var messageIdMSB = edt_id_msb.text.toString().trim()
         var messageIdLSB = edt_id_lsb.text.toString().trim()

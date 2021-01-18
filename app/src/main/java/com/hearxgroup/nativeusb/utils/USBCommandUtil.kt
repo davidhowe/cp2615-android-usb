@@ -66,8 +66,8 @@ object USBCommandUtil {
             requestedHex += hexArray[k]
             command[k] = hexToInt(hexArray[k])
         }
-        //Log.i(TAG, "requestedHex=$requestedHex")
-        //Log.i(TAG, "Command Hex =" + convertToString(command))
+        Log.i(TAG, "requestedHex=$requestedHex")
+        Log.i(TAG, "Command Hex =" + convertToString(command))
         val buffer1 = buildI2CCommand(command)!!
         //Log.i(TAG, "buffer1=$buffer1")
         //Log.i(TAG, "buffer1 size=${buffer1.size}")

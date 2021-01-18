@@ -102,6 +102,8 @@ class UsbService : Service() {
         return binder
     }
 
+
+
     //******************* PRIVATE METHODS *******************//
 
     private fun setupBroadcastReceiver() {
@@ -149,7 +151,12 @@ class UsbService : Service() {
     }
 
     private fun claimUSBDevice() {
-        Log.d(TAG, "claimUSBDevice")
+        Log.d(TAG, "claimUSBDevice()")
+
+        for(k in 0 until usbDevice!!.interfaceCount) {
+            Log.d(TAG, "Interface $k = ${usbDevice?.getInterface(k)}\n\n")
+        }
+
         usbDevice?.getInterface(DAC_INTERFACE_INDEX)?.also { intf ->
             usbInterface = intf
             for(endpIndex in 0 until usbInterface!!.endpointCount) {
@@ -172,14 +179,14 @@ class UsbService : Service() {
             Log.d(TAG, "claimed interface=${usbInterface}")
 
              usbManager?.openDevice(usbDevice)?.apply {
-                 usbConnection = this
-                //usbEvent.value = USBEvent(connected = true)
-                val claimResult = usbConnection!!.claimInterface(usbInterface, false)
-                Log.d(TAG, "claimResult=$claimResult")
-                if(claimResult) {
+                usbConnection = this
+                 usbEvent.value = USBEvent(active = true) //todo remove
+                 /*val claimResult = claimInterface() //todo add back
+                 if(claimResult) {
                     usbConnection!!.setInterface(usbInterface)
+                    Log.d(TAG, "Interface claimed")
                     usbEvent.value = USBEvent(active = true)
-                }
+                }*/
             }
         }
     }
@@ -227,7 +234,7 @@ class UsbService : Service() {
 
     private fun onReceivedData(inArray: ByteArray?) {
         try {
-            Log.d(TAG, "onReceivedData")
+            Log.d(TAG, "onReceivedData()")
             if(inArray!=null) {
                 Log.d(TAG, "data present")
                 val intArr = IntArray(inArray.size)
@@ -255,6 +262,36 @@ class UsbService : Service() {
      *  In this particular example. byte stream is converted to String and send to UI thread to
      *  be treated there.
      */
+
+    fun reconnectDevice() {
+        Log.d(TAG, "reconnectDevice()")
+        usbManager = getSystemService(USB_SERVICE) as UsbManager
+        findUSBDevice()
+    }
+
+    fun resetDevice() {
+        Log.d(TAG, "resetDevice()")
+        usbConnection?.releaseInterface(usbInterface)
+        usbConnection?.close()
+        usbDevice = null
+        usbManager = null
+    }
+
+    fun claimInterface() : Boolean {
+        Log.d(TAG, "claimInterface()")
+        val claimResult = usbConnection!!.claimInterface(usbInterface, false)
+        Log.d(TAG, "claimResult=$claimResult")
+        val setResult = usbConnection!!.setInterface(usbInterface)
+        Log.d(TAG, "setResult=$setResult")
+        return claimResult
+    }
+
+    fun removeInterface() : Boolean {
+        Log.d(TAG, "removeInterface()")
+        val releaseResult = usbConnection!!.releaseInterface(usbInterface)
+        Log.d(TAG, "releaseResult=$releaseResult")
+        return releaseResult
+    }
 
     fun setupForRead() {
         Log.d(TAG, "setupForRead()")
