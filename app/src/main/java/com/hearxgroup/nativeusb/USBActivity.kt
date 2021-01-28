@@ -35,17 +35,21 @@ abstract class USBActivity : AppCompatActivity() {
     }
 
     private val usbStatusObserver = Observer<UsbService.USBEvent> {
-            dacStatus.value = DacStatus.CONNECTING
 
             if(it.attached) {
+                dacStatus.value = DacStatus.CONNECTING
                 Log.d(TAG, "attached")
             } else if(it.detached) {
+                dacStatus.value = DacStatus.DISCONNECTED
                 Log.d(TAG, "detached")
             } else if(it.noDevicesAvailable) {
+                dacStatus.value = DacStatus.DISCONNECTED
                 Log.d(TAG, "noDevicesAvailable")
             } else if(it.findingDevices) {
+                dacStatus.value = DacStatus.CONNECTING
                 Log.d(TAG, "findingDevices")
             } else if (it.requiresPermission) {
+                dacStatus.value = DacStatus.CONNECTING
                 Log.d(TAG, "requiresPermission")
                 val permissionIntent = PendingIntent.getBroadcast(this, 0, Intent(ACTION_USB_PERMISSION), 0)
                 val filter = IntentFilter(ACTION_USB_PERMISSION)

@@ -26,7 +26,7 @@ class RawActivity : USBActivity() {
             rlyt_root.visibility = if(it) View.VISIBLE else View.GONE
         }
 
-        dacActive.observe(this, activeObserver)
+        //dacActive.observe(this, activeObserver)
     }
 
     private fun setupUI() {

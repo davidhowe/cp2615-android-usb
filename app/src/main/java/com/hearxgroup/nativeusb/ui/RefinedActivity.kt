@@ -9,6 +9,7 @@ import android.os.Environment
 import android.util.Log
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.hearxgroup.nativeusb.R
 import com.hearxgroup.nativeusb.USBActivity
@@ -25,6 +26,79 @@ class RefinedActivity : USBActivity() {
     private var streamId: Int = -1
     private var dacVersionV3 = false
     private var channel = CHANNEL.LEFT
+
+    private var v2CommandClearAtt = listOf(
+            "1", //opening bit
+            "88", //PT2259 chip address
+            "0", //not sure
+            "5", //not sure
+            "88", //PT2259 chip address
+            "F0", //Clear register * required
+            "74", //Mute code (Mute off)
+            "E0", //10dB code (0dB att dual)
+            "D0" //1dB code (0dB att dual)
+    )
+
+    private var v3CommandClearAtt = listOf(
+            "1", //opening bit
+            "50", //PGA2311 chip address
+            "0", //not sure
+            "5", //not sure
+            "50", //PGA2311 chip address
+            "F0", //Clear register * required
+            "74", //Mute code (Mute off)
+            "E0", //10dB code (0dB att dual)
+            "D0" //1dB code (0dB att dual)
+    )
+
+    private var v2CommandRight50Att = listOf(
+            "1", //opening bit
+            "88", //PT2259 chip address
+            "0", //not sure
+            "5", //not sure
+            "88", //PT2259 chip address
+            "F0", //Clear register * required
+            "76", //Mute code (Left mute)
+            "65", //10dB code (50dB att right)
+            "20" //1dB code (0dB att right)
+    )
+
+    private var v3CommandRight50Att = listOf(
+            "1", //opening bit
+            "50", //PGA2311 chip address
+            "0", //not sure
+            "5", //not sure
+            "50", //PGA2311 chip address
+            "F0", //Clear register * required
+            "76", //Mute code (Left mute)
+            "65", //10dB code (50dB att right)
+            "20" //1dB code (0dB att right)
+    )
+
+    private var v2CommandLeft50Att = listOf(
+            "1", //opening bit
+            "88", //PT2259 chip address
+            "0", //not sure
+            "5", //not sure
+            "88", //PT2259 chip address
+            "F0", //Clear register * required
+            "75", //Mute code (Right mute)
+            "B5", //10dB code (50dB att left)
+            "A0" //1dB code (0dB att left)
+    )
+
+    private var v3CommandLeft50Att = listOf(
+            "1", //opening bit
+            "50", //PGA2311 chip address
+            "0", //not sure
+            "5", //not sure
+            "50", //PGA2311 chip address
+            "F0", //Clear register * required
+            "75", //Mute code (Right mute)
+            "B5", //10dB code (50dB att left)
+            "A0" //1dB code (0dB att left)
+    )
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,9 +164,11 @@ class RefinedActivity : USBActivity() {
         tv_conn_status.text = "Connection Status: Disconnected"
 
         btn_clear_register.setOnClickListener { // Makes dual channel 0dB att
-            //todo adjust for DAC version
-            //todo adjust for channel selected
-            val payload = listOf("1", "88", "0", "5", "88", "F0", "74", "E0", "D0")
+            val payload = if(!dacVersionV3) {
+                v2CommandClearAtt
+            } else {
+                v3CommandClearAtt
+            }
             val payloadSize = listOf(payload.size.toString())
             val payloadList = payload+payloadSize
             usbService?.writeCommand(
@@ -103,22 +179,37 @@ class RefinedActivity : USBActivity() {
         }
 
         btn_attn_minus.setOnClickListener { // Makes dual channel 40dB att
-            //todo adjust for DAC version
-            //todo adjust for channel selected
-            val payload = listOf("1", "88", "0", "5", "88", "F0", "74", "E5", "D0")
-            val payloadSize = listOf(payload.size.toString())
-            val payloadList = payload+payloadSize
-            usbService?.writeCommand(
-                    payloadList = payloadList,
-                    messageIdMSB = "D4",
-                    messageIdLSB = "00"
-            )
+            if(dacVersionV3) {
+                /*val payload = emptyList<String>() //todo DAC v3
+                val payloadSize = listOf(payload.size.toString())
+                val payloadList = payload + payloadSize
+                usbService?.writeCommand(
+                        payloadList = payloadList,
+                        messageIdMSB = "D4",
+                        messageIdLSB = "00"
+                )*/
+                Toast.makeText(this, "TODO", Toast.LENGTH_LONG).show()
+
+            } else {
+                Toast.makeText(this, "Not relevant for v2 DAC", Toast.LENGTH_LONG).show()
+            }
         }
 
         btn_attn_plus.setOnClickListener { // Makes dual channel 40dB att
             //todo adjust for DAC version
             //todo adjust for channel selected
-            val payload = listOf("1", "88", "0", "5", "88", "F0", "74", "E5", "D0")
+            val payload = if(!dacVersionV3) {
+                if(channel==CHANNEL.LEFT)
+                    v2CommandLeft50Att
+                else
+                    v2CommandRight50Att
+            } else {
+                if(channel==CHANNEL.LEFT)
+                    v3CommandLeft50Att
+                else
+                    v3CommandRight50Att
+            }
+
             val payloadSize = listOf(payload.size.toString())
             val payloadList = payload+payloadSize
             usbService?.writeCommand(
@@ -140,7 +231,7 @@ class RefinedActivity : USBActivity() {
 
         sw_dac_version.setOnCheckedChangeListener { buttonView, isChecked ->
             dacVersionV3 = isChecked
-            tv_conn_status.text = "DAC Version: ${if(dacVersionV3) "V3" else "V2"}"
+            tv_dac_version.text = "DAC Version: ${if(dacVersionV3) "V3" else "V2"}"
         }
 
         sw_channel.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -148,7 +239,7 @@ class RefinedActivity : USBActivity() {
                 CHANNEL.RIGHT
             else
                 CHANNEL.LEFT
-            tv_conn_status.text = "Channel: ${channel.name}"
+            tv_channel.text = "Channel: ${channel.name}"
         }
     }
 
