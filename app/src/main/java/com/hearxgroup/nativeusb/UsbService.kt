@@ -180,13 +180,13 @@ class UsbService : Service() {
 
              usbManager?.openDevice(usbDevice)?.apply {
                 usbConnection = this
-                 usbEvent.value = USBEvent(active = true) //todo remove
-                 /*val claimResult = claimInterface() //todo add back
+                 //usbEvent.value = USBEvent(active = true) //todo remove
+                 val claimResult = claimInterface() //todo add back
                  if(claimResult) {
                     usbConnection!!.setInterface(usbInterface)
                     Log.d(TAG, "Interface claimed")
                     usbEvent.value = USBEvent(active = true)
-                }*/
+                 }
             }
         }
     }

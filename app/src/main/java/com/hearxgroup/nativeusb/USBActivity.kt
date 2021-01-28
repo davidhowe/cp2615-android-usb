@@ -15,8 +15,10 @@ abstract class USBActivity : AppCompatActivity() {
 
     private val ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION"
 
+    enum class DacStatus {DISCONNECTED, CONNECTING, CONNECTED}
+
     protected var usbService: UsbService? = null
-    protected var dacActive = MutableLiveData<Boolean>().apply { false }
+    protected var dacStatus = MutableLiveData<DacStatus>().apply { DacStatus.DISCONNECTED }
 
     private val usbConnection = object : ServiceConnection {
         override fun onServiceConnected(arg0: ComponentName, arg1: IBinder) {
@@ -33,7 +35,7 @@ abstract class USBActivity : AppCompatActivity() {
     }
 
     private val usbStatusObserver = Observer<UsbService.USBEvent> {
-            dacActive.value = false
+            dacStatus.value = DacStatus.CONNECTING
 
             if(it.attached) {
                 Log.d(TAG, "attached")
@@ -53,7 +55,7 @@ abstract class USBActivity : AppCompatActivity() {
                 Log.d(TAG, "invalid")
             } else if(it.active) {
                 Log.d(TAG, "active")
-                dacActive.value = true
+                dacStatus.value = DacStatus.CONNECTED
             } else if(it.receivedData.isNotEmpty()) {
                 Log.d(TAG, "receivedData=${it.receivedData}")
                 //todo print to console

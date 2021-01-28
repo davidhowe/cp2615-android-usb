@@ -15,7 +15,53 @@
         android:text="Refined CP2615 Interface"
         android:textAppearance="?android:attr/textAppearanceLarge"/>
 
-    <Button
+    <TextView
+        android:id="@+id/tv_conn_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitle"
+        android:layout_marginTop="@dimen/fab_margin"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="Connection Status: Ready"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+    <TextView
+        android:id="@+id/tv_dac_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/tv_conn_status"
+        android:layout_marginTop="@dimen/fab_margin"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="DAC Version: V2"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+    <Switch
+        android:id="@+id/sw_dac_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Version"
+        app:layout_constraintTop_toTopOf="@+id/tv_dac_version"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_channel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/sw_dac_version"
+        android:layout_marginTop="@dimen/fab_margin"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="Channel: L"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+    <Switch
+        android:id="@+id/sw_channel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Channel"
+        app:layout_constraintTop_toTopOf="@+id/tv_channel"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!--<Button
         android:id="@+id/btn_reconnect_device"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -57,7 +103,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/btn_attn_minus"
-        android:text="REMOVE INTERFACE"/>
+        android:text="REMOVE INTERFACE"/>-->
+
+    <Button
+        android:id="@+id/btn_attn_plus"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:layout_marginBottom="@dimen/fab_margin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btn_attn_minus"
+        android:text="ATT + 50dB"/>
 
     <Button
         android:id="@+id/btn_attn_minus"
@@ -68,7 +125,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/btn_clear_register"
-        android:text="ATT + 40dB"/>
+        android:text="ATT - 10dB"/>
 
     <Button
         android:id="@+id/btn_clear_register"
@@ -79,7 +136,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/btn_play_start"
-        android:text="CLEAR REGISTER"/>
+        android:text="ATT 0dB"/>
 
     <Button
         android:id="@+id/btn_play_start"
