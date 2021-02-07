@@ -19,6 +19,8 @@ abstract class USBActivity : AppCompatActivity() {
 
     protected var usbService: UsbService? = null
     protected var dacStatus = MutableLiveData<DacStatus>().apply { DacStatus.DISCONNECTED }
+    protected var dacComm = MutableLiveData<String>().apply { "" }
+
 
     private val usbConnection = object : ServiceConnection {
         override fun onServiceConnected(arg0: ComponentName, arg1: IBinder) {
@@ -64,6 +66,9 @@ abstract class USBActivity : AppCompatActivity() {
                 Log.d(TAG, "receivedData=${it.receivedData}")
                 //todo print to console
             }
+
+        if(!it.wroteData.isNullOrEmpty())
+            dacComm.value = it.wroteData
     }
 
     public override fun onResume() {

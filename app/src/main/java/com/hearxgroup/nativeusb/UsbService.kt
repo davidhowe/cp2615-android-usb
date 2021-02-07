@@ -42,6 +42,7 @@ class UsbService : Service() {
             val findingDevices: Boolean = false,
             val noDevicesAvailable: Boolean = false,
             val requiresPermission: Boolean = false,
+            val wroteData: String = "",
             val receivedData: String = ""
     )
 
@@ -180,8 +181,7 @@ class UsbService : Service() {
 
              usbManager?.openDevice(usbDevice)?.apply {
                 usbConnection = this
-                 //usbEvent.value = USBEvent(active = true) //todo remove
-                 val claimResult = claimInterface() //todo add back
+                 val claimResult = claimInterface()
                  if(claimResult) {
                     usbConnection!!.setInterface(usbInterface)
                     Log.d(TAG, "Interface claimed")
@@ -376,7 +376,8 @@ class UsbService : Service() {
                 synchronized(this) {
                     val permission = usbManager?.hasPermission(usbDevice) ?: false
                     Log.d(TAG, "permission=$permission")
-                    USBCommandUtil.writeIOPMessage(hexArray = messageList.toTypedArray(), connection = usbConnection!!, outEndpoint = outEndpoint!!)
+                    val commandHex = USBCommandUtil.writeIOPMessage(hexArray = messageList.toTypedArray(), connection = usbConnection!!, outEndpoint = outEndpoint!!)
+                    usbEvent.value = USBEvent(wroteData = commandHex?:"", active = true)
                 }
             }
         }

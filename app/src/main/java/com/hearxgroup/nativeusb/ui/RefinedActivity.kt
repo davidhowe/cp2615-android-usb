@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.os.Environment
 import android.util.Log
 import android.view.View
-import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.hearxgroup.nativeusb.R
@@ -24,7 +23,7 @@ class RefinedActivity : USBActivity() {
     private lateinit var audioManager: AudioManager
     private var sampleId: Int = -1
     private var streamId: Int = -1
-    private var dacVersionV3 = false
+    private var dacVersionV3 = false //v2:PT2259 v3:PGA2311
     private var channel = CHANNEL.LEFT
 
     private var v2CommandClearAtt = listOf(
@@ -64,15 +63,14 @@ class RefinedActivity : USBActivity() {
     )
 
     private var v3CommandRight50Att = listOf(
-            "1", //opening bit
-            "50", //PGA2311 chip address
-            "0", //not sure
-            "5", //not sure
-            "50", //PGA2311 chip address
-            "F0", //Clear register * required
-            "76", //Mute code (Left mute)
-            "65", //10dB code (50dB att right)
-            "20" //1dB code (0dB att right)
+            "01",
+            "00",
+            "03",
+            "01",
+            //"50", //PGA2311 chip address
+            //"01",
+            "98",
+            "98"
     )
 
     private var v2CommandLeft50Att = listOf(

@@ -57,7 +57,7 @@ object USBCommandUtil {
         return sb.toString()
     }*/
 
-    fun writeIOPMessage(hexArray: Array<String>, connection: UsbDeviceConnection, outEndpoint: UsbEndpoint) {
+    fun writeIOPMessage(hexArray: Array<String>, connection: UsbDeviceConnection, outEndpoint: UsbEndpoint) : String? {
         Log.i(TAG, "writeIOPMessage")
         //Log.i(TAG, "hexArray=$hexArray")
         var requestedHex = ""
@@ -68,6 +68,7 @@ object USBCommandUtil {
         }
         Log.i(TAG, "requestedHex=$requestedHex")
         Log.i(TAG, "Command Hex =" + convertToString(command))
+        val commandHex = convertToString(command)
         val buffer1 = buildI2CCommand(command)!!
         //Log.i(TAG, "buffer1=$buffer1")
         //Log.i(TAG, "buffer1 size=${buffer1.size}")
@@ -78,6 +79,7 @@ object USBCommandUtil {
                 buffer1.size, //length in bytes
                 1000)
         Log.d(TAG, "syncWriteResult1 = $syncWriteResult1")
+        return commandHex
     }
 
     private fun hexToString(hex: String) : String {

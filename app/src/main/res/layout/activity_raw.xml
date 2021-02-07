@@ -1,35 +1,76 @@
-<RelativeLayout
-    android:id="@+id/rlyt_root"
+<RelativeLayout android:id="@+id/rlyt_root"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:padding="16dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
-        android:id="@+id/textViewTitle"
+        android:id="@+id/tv_conn_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:text="Raw CP2615 Interface"
-        android:textAppearance="?android:attr/textAppearanceLarge"/>
+        android:layout_marginTop="8dp"
+        android:text="Connection Status: Ready"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-    <TextView
+    <!--<TextView
         android:id="@+id/tv_usb_output"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="120dp"
+        android:layout_below="@+id/tv_conn_status"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="34dp"
         android:background="#FFFFFF"
         android:scrollbars="vertical"
-        android:gravity="bottom" />
+        android:gravity="bottom" />-->
+
+    <EditText
+        android:id="@+id/edt_tone_freq"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_conn_status"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="8dp"
+        android:hint="Tone Freq Hz"
+        android:text="2000"
+        android:inputType="number"
+        android:ems="2"/>
+
+    <EditText
+        android:id="@+id/edt_tone_int"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edt_tone_freq"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="8dp"
+        android:hint="Tone Intensity dB"
+        android:text="70"
+        android:inputType="number"
+        android:ems="2"/>
+
+    <TextView
+        android:id="@+id/tv_tone_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edt_tone_int"
+        android:text="File stored DCIM/raw-dac/tone_fXhz_pos_X.ogg"/>
+
+    <ImageView
+        android:id="@+id/iv_tone_reset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/edt_tone_freq"
+        android:layout_alignBottom="@+id/edt_tone_int"
+        android:layout_alignParentEnd="true"
+        app:srcCompat = "@drawable/ic_baseline_refresh_24"/>
 
     <EditText
         android:id="@+id/edt_id_msb"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_usb_output"
-        android:layout_marginTop="28dp"
+        android:layout_below="@+id/tv_tone_info"
+        android:layout_marginTop="16dp"
         android:hint="Message ID MSB"
         android:maxLength="2"
         android:inputType="textCapCharacters"
@@ -58,7 +99,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_below="@+id/tv_payload_data"
-        android:layout_above="@+id/llyt_actions">
+        android:layout_above="@+id/tv_sent">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -139,15 +180,56 @@
                 android:maxLength="2"
                 android:inputType="textCapCharacters"
                 android:ems="2"/>
+
+            <EditText
+                android:id="@+id/edt_payload_7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edt_payload_6"
+                android:layout_marginTop="8dp"
+                android:hint="Payload [7]"
+                android:maxLength="2"
+                android:inputType="textCapCharacters"
+                android:ems="2"/>
+
+            <EditText
+                android:id="@+id/edt_payload_8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edt_payload_7"
+                android:layout_marginTop="8dp"
+                android:hint="Payload [8]"
+                android:maxLength="2"
+                android:inputType="textCapCharacters"
+                android:ems="2"/>
+
+            <EditText
+                android:id="@+id/edt_payload_9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edt_payload_8"
+                android:layout_marginTop="8dp"
+                android:hint="Payload [9]"
+                android:maxLength="2"
+                android:inputType="textCapCharacters"
+                android:ems="2"/>
+
         </RelativeLayout>
     </ScrollView>
+
+    <TextView
+        android:id="@+id/tv_sent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/llyt_actions"
+        android:text="Sent: "/>
 
     <LinearLayout
         android:id="@+id/llyt_actions"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_alignParentBottom="true">
+        android:layout_above="@+id/llyt_actions_player">
 
         <Button
             android:id="@+id/btn_clear"
@@ -167,6 +249,30 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/llyt_actions_player"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/btn_play_stop"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:layout_marginEnd="8dp"
+            android:text="PLAY STOP"/>
+
+        <Button
+            android:id="@+id/btn_play_start"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:layout_marginStart="8dp"
+            android:text="PLAY START"/>
+
+    </LinearLayout>
 
 
 </RelativeLayout>
