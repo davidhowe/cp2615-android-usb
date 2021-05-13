@@ -12,7 +12,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:text="Refined CP2615 Interface"
+        android:gravity="center"
+        android:text="Refined CP2615 Interface\nDAC V3"
         android:textAppearance="?android:attr/textAppearanceLarge"/>
 
     <TextView
@@ -26,40 +27,90 @@
         android:textAppearance="?android:attr/textAppearanceMedium"/>
 
     <TextView
-        android:id="@+id/tv_dac_version"
+        android:id="@+id/tv_attenuation_left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/tv_conn_status"
         android:layout_marginTop="@dimen/fab_margin"
         app:layout_constraintStart_toStartOf="parent"
-        android:text="DAC Version: V2"
+        android:text="Attenuation LEFT: "
         android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-    <Switch
-        android:id="@+id/sw_dac_version"
-        android:layout_width="wrap_content"
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/spin_att_left"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:text="Version"
-        app:layout_constraintTop_toTopOf="@+id/tv_dac_version"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_attenuation_left"/>
 
     <TextView
-        android:id="@+id/tv_channel"
+        android:id="@+id/tv_attenuation_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/sw_dac_version"
+        app:layout_constraintTop_toBottomOf="@+id/tv_attenuation_left"
         android:layout_marginTop="@dimen/fab_margin"
         app:layout_constraintStart_toStartOf="parent"
-        android:text="Channel: LEFT"
+        android:text="Attenuation RIGHT: "
         android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-    <Switch
-        android:id="@+id/sw_channel"
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/spin_att_right"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_attenuation_right"/>
+
+    <TextView
+        android:id="@+id/tv_tone_freq"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Channel"
-        app:layout_constraintTop_toTopOf="@+id/tv_channel"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@+id/tv_attenuation_right"
+        android:layout_marginTop="@dimen/fab_margin"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="Tone frequency: "
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/spin_tone_freq"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_tone_freq"/>
+
+    <TextView
+        android:id="@+id/tv_tone_intensity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/tv_tone_freq"
+        android:layout_marginTop="@dimen/fab_margin"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="Tone intensity: "
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/spin_tone_intensity"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_tone_intensity"/>
+
+    <TextView
+        android:id="@+id/tv_tone_channel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/tv_tone_intensity"
+        android:layout_marginTop="@dimen/fab_margin"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="Intended Channel: L"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switch_tone_channel"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_tone_channel"/>
+
 
     <!--<Button
         android:id="@+id/btn_reconnect_device"
@@ -106,29 +157,7 @@
         android:text="REMOVE INTERFACE"/>-->
 
     <Button
-        android:id="@+id/btn_attn_plus"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.5"
-        android:layout_marginBottom="@dimen/fab_margin"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/btn_attn_minus"
-        android:text="ATT + 50dB"/>
-
-    <Button
-        android:id="@+id/btn_attn_minus"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.5"
-        android:layout_marginBottom="@dimen/fab_margin"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/btn_clear_register"
-        android:text="ATT - 10dB"/>
-
-    <Button
-        android:id="@+id/btn_clear_register"
+        android:id="@+id/btn_send_command"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="0.5"
@@ -136,7 +165,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/btn_play_start"
-        android:text="ATT 0dB"/>
+        android:text="SEND DAC COMMAND"/>
 
     <Button
         android:id="@+id/btn_play_start"

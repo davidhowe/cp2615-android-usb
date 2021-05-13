@@ -92,4 +92,19 @@ object USBCommandUtil {
         }
         return output.toString()
     }
+
+    fun attCalcPGA2311(intendedAttenuation: Int) : String {
+        Log.d(TAG, "attCalcPGA2311")
+        val resultInt = ((((intendedAttenuation - 31.5)/(-0.5))-255)*-1).toInt()
+        val resultHex = Integer.toHexString(resultInt)
+        Log.d(TAG, "resultInt=$resultInt")
+        Log.d(TAG, "resultHex=$resultHex")
+        return resultHex
+    }
+
+    fun attCalcPT2259(intendedAttenuation: Int) : String {
+        //todo
+        Log.d(TAG, "attCalcPT2259")
+        return ""
+    }
 }

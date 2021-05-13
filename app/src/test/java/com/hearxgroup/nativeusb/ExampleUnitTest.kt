@@ -1,5 +1,6 @@
 package com.hearxgroup.nativeusb
 
+import android.util.Log
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -13,5 +14,13 @@ class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
         assertEquals(4, 2 + 2)
+    }
+
+    @Test
+    fun pga2311_att() {
+        val att = -19
+        val nValue = ((((att - 31.5)/(-0.5))-255)*-1).toInt()
+        //Log.d("ExampleUnitTest", "nValue=$nValue")
+        assertEquals(1, nValue)
     }
 }
