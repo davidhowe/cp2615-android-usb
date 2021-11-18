@@ -4,14 +4,12 @@ import android.app.PendingIntent
 import android.content.*
 import android.os.Bundle
 import android.os.IBinder
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import timber.log.Timber
 
 abstract class USBActivity : AppCompatActivity() {
-
-    private val TAG = USBActivity::class.java.simpleName
 
     private val ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION"
 
@@ -24,47 +22,56 @@ abstract class USBActivity : AppCompatActivity() {
 
     private val usbConnection = object : ServiceConnection {
         override fun onServiceConnected(arg0: ComponentName, arg1: IBinder) {
-            Log.d(TAG, "onServiceConnected")
+            Timber.d("onServiceConnected")
             usbService = (arg1 as UsbService.UsbBinder).service
             usbService!!.exposedUsbEvent.observe(this@USBActivity, usbStatusObserver)
             //usbService!!.setHandler(mHandler)
         }
 
         override fun onServiceDisconnected(arg0: ComponentName) {
-            Log.d(TAG, "onServiceDisconnected")
+            Timber.d("onServiceDisconnected")
             usbService = null
         }
     }
 
     private val usbStatusObserver = Observer<UsbService.USBEvent> {
 
-            if(it.attached) {
-                dacStatus.value = DacStatus.CONNECTING
-                Log.d(TAG, "attached")
-            } else if(it.detached) {
-                dacStatus.value = DacStatus.DISCONNECTED
-                Log.d(TAG, "detached")
-            } else if(it.noDevicesAvailable) {
-                dacStatus.value = DacStatus.DISCONNECTED
-                Log.d(TAG, "noDevicesAvailable")
-            } else if(it.findingDevices) {
-                dacStatus.value = DacStatus.CONNECTING
-                Log.d(TAG, "findingDevices")
-            } else if (it.requiresPermission) {
-                dacStatus.value = DacStatus.CONNECTING
-                Log.d(TAG, "requiresPermission")
-                val permissionIntent = PendingIntent.getBroadcast(this, 0, Intent(ACTION_USB_PERMISSION), 0)
-                val filter = IntentFilter(ACTION_USB_PERMISSION)
-                registerReceiver(usbService?.usbReceiver, filter)
-                usbService?.usbManager?.requestPermission(usbService?.usbDevice, permissionIntent)
-            } else if(it.invalid) {
-                Log.d(TAG, "invalid")
-            } else if(it.active) {
-                Log.d(TAG, "active")
-                dacStatus.value = DacStatus.CONNECTED
-            } else if(it.receivedData.isNotEmpty()) {
-                Log.d(TAG, "receivedData=${it.receivedData}")
-                //todo print to console
+            when {
+                it.attached -> {
+                    dacStatus.value = DacStatus.CONNECTING
+                    Timber.d("attached")
+                }
+                it.detached -> {
+                    dacStatus.value = DacStatus.DISCONNECTED
+                    Timber.d("detached")
+                }
+                it.noDevicesAvailable -> {
+                    dacStatus.value = DacStatus.DISCONNECTED
+                    Timber.d("noDevicesAvailable")
+                }
+                it.findingDevices -> {
+                    dacStatus.value = DacStatus.CONNECTING
+                    Timber.d("findingDevices")
+                }
+                it.requiresPermission -> {
+                    dacStatus.value = DacStatus.CONNECTING
+                    Timber.d("requiresPermission")
+                    val permissionIntent = PendingIntent.getBroadcast(this, 0, Intent(ACTION_USB_PERMISSION), 0)
+                    val filter = IntentFilter(ACTION_USB_PERMISSION)
+                    registerReceiver(usbService?.usbReceiver, filter)
+                    usbService?.usbManager?.requestPermission(usbService?.usbDevice, permissionIntent)
+                }
+                it.invalid -> {
+                    Timber.d("invalid")
+                }
+                it.active -> {
+                    Timber.d("active")
+                    dacStatus.value = DacStatus.CONNECTED
+                }
+                it.receivedData.isNotEmpty() -> {
+                    Timber.d("receivedData=${it.receivedData}")
+                    //todo print to console
+                }
             }
 
         if(!it.wroteData.isNullOrEmpty())

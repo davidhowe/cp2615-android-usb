@@ -3,15 +3,13 @@ package com.hearxgroup.nativeusb.utils
 import android.hardware.usb.UsbDeviceConnection
 import android.hardware.usb.UsbEndpoint
 import android.util.Log
-import java.util.*
+import timber.log.Timber
 
 object USBCommandUtil {
 
-    private val TAG = USBCommandUtil::class.java.simpleName
-
     val encoding = "0123456789ABCDEF".toCharArray()
 
-    fun buildI2CCommand(command: IntArray): ByteArray? {
+    fun buildI2CCommand(command: IntArray): ByteArray {
         val commandBytes = ByteArray(command.size)
 
         //Log.i(TAG, "command.length="+command.length);
@@ -58,7 +56,7 @@ object USBCommandUtil {
     }*/
 
     fun writeIOPMessage(hexArray: Array<String>, connection: UsbDeviceConnection, outEndpoint: UsbEndpoint) : String? {
-        Log.i(TAG, "writeIOPMessage")
+        Timber.d("writeIOPMessage")
         //Log.i(TAG, "hexArray=$hexArray")
         var requestedHex = ""
         val command = IntArray(64){0}
@@ -66,8 +64,8 @@ object USBCommandUtil {
             requestedHex += hexArray[k]
             command[k] = hexToInt(hexArray[k])
         }
-        Log.i(TAG, "requestedHex=$requestedHex")
-        Log.i(TAG, "Command Hex =" + convertToString(command))
+        Timber.d("requestedHex=$requestedHex")
+        Timber.d("Command Hex =" + convertToString(command))
         val commandHex = convertToString(command)
         val buffer1 = buildI2CCommand(command)!!
         //Log.i(TAG, "buffer1=$buffer1")
@@ -78,7 +76,7 @@ object USBCommandUtil {
                 buffer1,
                 buffer1.size, //length in bytes
                 1000)
-        Log.d(TAG, "syncWriteResult1 = $syncWriteResult1")
+        Timber.d("syncWriteResult1 = $syncWriteResult1")
         return commandHex
     }
 
@@ -94,17 +92,17 @@ object USBCommandUtil {
     }
 
     fun attCalcPGA2311(intendedAttenuation: Int) : String {
-        Log.d(TAG, "attCalcPGA2311")
+        Timber.d("attCalcPGA2311")
         val resultInt = ((((intendedAttenuation - 31.5)/(-0.5))-255)*-1).toInt()
         val resultHex = Integer.toHexString(resultInt)
-        Log.d(TAG, "resultInt=$resultInt")
-        Log.d(TAG, "resultHex=$resultHex")
+        Timber.d("resultInt=$resultInt")
+        Timber.d("resultHex=$resultHex")
         return resultHex
     }
 
     fun attCalcPT2259(intendedAttenuation: Int) : String {
         //todo
-        Log.d(TAG, "attCalcPT2259")
+        Timber.d("attCalcPT2259")
         return ""
     }
 }

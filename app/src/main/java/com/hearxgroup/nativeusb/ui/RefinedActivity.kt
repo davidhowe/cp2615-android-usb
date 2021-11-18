@@ -6,24 +6,21 @@ import android.media.AudioManager
 import android.media.SoundPool
 import android.os.Bundle
 import android.os.Environment
-import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.hearxgroup.nativeusb.R
 import com.hearxgroup.nativeusb.USBActivity
 import com.hearxgroup.nativeusb.utils.USBCommandUtil
-import kotlinx.android.synthetic.main.activity_raw.*
 import kotlinx.android.synthetic.main.activity_refined.*
 import kotlinx.android.synthetic.main.activity_refined.btn_play_start
 import kotlinx.android.synthetic.main.activity_refined.btn_play_stop
 import kotlinx.android.synthetic.main.activity_refined.tv_conn_status
+import timber.log.Timber
 import java.io.File
 
 class RefinedActivity : USBActivity() {
 
-    private val TAG = RefinedActivity::class.java.simpleName
     private enum class CHANNEL{LEFT, RIGHT}
     private var soundPool: SoundPool? = null
     private lateinit var audioManager: AudioManager
@@ -62,8 +59,7 @@ class RefinedActivity : USBActivity() {
                 .build()
 
         soundPool!!.setOnLoadCompleteListener { soundPool, sampleId, status ->
-            Log.d("", "sampleId=$sampleId")
-            Log.d("", "sampleId=$sampleId")
+            Timber.d("sampleId=$sampleId")
             this.sampleId = sampleId
             if(streamId==-1) {
                 streamId = soundPool?.play(
@@ -96,8 +92,8 @@ class RefinedActivity : USBActivity() {
                 val attenuationRight = spin_att_right.selectedItem as Int
                 val nLeftHex = USBCommandUtil.attCalcPGA2311(attenuationLeft)
                 val nRightHex = USBCommandUtil.attCalcPGA2311(attenuationRight)
-                Log.d(TAG, "nLeftHex=$nLeftHex")
-                Log.d(TAG, "nRightHex=$nRightHex")
+                Timber.d("nLeftHex=$nLeftHex")
+                Timber.d("nRightHex=$nRightHex")
 
                 listOf(
                         "01",
@@ -112,7 +108,7 @@ class RefinedActivity : USBActivity() {
 
             val payloadSize = listOf(payload.size.toString())
             val payloadList = payload+payloadSize
-            usbService?.writeCommand(
+            usbService?.writeCommandV3(
                 payloadList = payloadList,
                 messageIdMSB = "D4",
                 messageIdLSB = "00"
@@ -151,8 +147,8 @@ class RefinedActivity : USBActivity() {
     }
 
     private fun loadToneFileForPlayback(freq: Int, intensity: Int) : Int {
-        Log.d(TAG, "loadFileForPlayback")
-        Log.d(TAG, "freq=$freq  intensity=$intensity")
+        Timber.d("loadFileForPlayback")
+        Timber.d("freq=$freq  intensity=$intensity")
         audioManager.setStreamVolume(
                 AudioManager.STREAM_MUSIC,
                 audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC),
@@ -162,7 +158,7 @@ class RefinedActivity : USBActivity() {
         val filePath = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_DCIM
         ).toString()+ File.separator+"raw-dac/tone_f${freq}hz_pos_${intensity}.ogg"
-        Log.d(TAG, "filePath=$filePath")
+        Timber.d("filePath=$filePath")
         return soundPool!!.load(filePath, 1)
     }
 

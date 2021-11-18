@@ -6,13 +6,11 @@ import android.media.AudioManager
 import android.media.SoundPool
 import android.os.Bundle
 import android.os.Environment
-import android.text.method.ScrollingMovementMethod
-import android.util.Log
-import android.widget.TextView
 import androidx.lifecycle.Observer
 import com.hearxgroup.nativeusb.R
 import com.hearxgroup.nativeusb.USBActivity
 import kotlinx.android.synthetic.main.activity_raw.*
+import timber.log.Timber
 import java.io.File
 
 class RawActivity : USBActivity() {
@@ -90,7 +88,7 @@ class RawActivity : USBActivity() {
 
     private fun sendSerialCommand() {
 
-        Log.d(TAG, "sendSerialCommand()")
+        Timber.d("sendSerialCommand()")
 
         var messageIdMSB = edt_id_msb.text.toString().trim()
         var messageIdLSB = edt_id_lsb.text.toString().trim()
@@ -133,7 +131,7 @@ class RawActivity : USBActivity() {
         if(edt_payload_9.text.toString().isNotEmpty())
             payloadList.add(edt_payload_9.text.toString())
 
-        usbService?.writeCommand(
+        usbService?.writeCommandV3(
                 payloadList = payloadList,
                 messageIdMSB = messageIdMSB,
                 messageIdLSB = messageIdLSB
@@ -154,8 +152,8 @@ class RawActivity : USBActivity() {
                 .build()
 
         soundPool!!.setOnLoadCompleteListener { soundPool, sampleId, status ->
-            Log.d("", "sampleId=$sampleId")
-            Log.d("", "sampleId=$sampleId")
+            Timber.d("sampleId=$sampleId")
+            Timber.d("sampleId=$sampleId")
             this.sampleId = sampleId
             if(streamId==-1) {
                 streamId = soundPool?.play(
@@ -173,7 +171,7 @@ class RawActivity : USBActivity() {
     }
 
     private fun loadToneFileForPlayback() : Int {
-        Log.d(TAG, "loadFileForPlayback")
+        Timber.d("loadFileForPlayback")
         audioManager.setStreamVolume(
                 AudioManager.STREAM_MUSIC,
                 audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC),
@@ -183,7 +181,7 @@ class RawActivity : USBActivity() {
         val filePath = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_DCIM
         ).toString()+ File.separator+"raw-dac/tone_f${edt_tone_freq.text}hz_pos_${edt_tone_int.text}.ogg"
-        Log.d(TAG, "filePath=$filePath")
+        Timber.d("filePath=$filePath")
         return soundPool!!.load(filePath, 1)
     }
 }
