@@ -94,10 +94,6 @@ class RefinedActivity : USBActivity() {
                 //DAC V3
                 val attenuationLeft = spin_att_left.selectedItem as Int
                 val attenuationRight = spin_att_right.selectedItem as Int
-                val nLeft = (((attenuationLeft - 31.5)/(-0.5))-255)*-1
-                Log.d(TAG, "nLeft=$nLeft")
-                val nRight = (((attenuationRight - 31.5)/(-0.5))-255)*-1
-                Log.d(TAG, "nRight=$nRight")
                 val nLeftHex = USBCommandUtil.attCalcPGA2311(attenuationLeft)
                 val nRightHex = USBCommandUtil.attCalcPGA2311(attenuationRight)
                 Log.d(TAG, "nLeftHex=$nLeftHex")
@@ -128,6 +124,7 @@ class RefinedActivity : USBActivity() {
         }
 
         btn_play_stop.setOnClickListener {
+            soundPool?.autoPause()
             soundPool?.stop(streamId)
             soundPool?.release()
             streamId = -1

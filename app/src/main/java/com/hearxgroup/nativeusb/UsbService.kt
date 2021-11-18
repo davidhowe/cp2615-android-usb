@@ -136,6 +136,8 @@ class UsbService : Service() {
                 if (device.vendorId ==DAC_VENDOR_ID && device.productId == DAC_PRODUCT_ID) {
                     // There is a supported device connected - request permission to access it.
                     usbDevice = device
+                    Log.d(TAG, "productId="+device.productId)
+                    Log.d(TAG, "serialNumber="+device.serialNumber)
                     usbEvent.value = USBEvent(requiresPermission = true)
                     break
                 }
